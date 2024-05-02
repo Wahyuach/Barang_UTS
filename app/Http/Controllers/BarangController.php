@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use App\Models\Barang;
+use App\Models\Satuan;
 
 class BarangController extends Controller
 {
@@ -14,9 +16,8 @@ class BarangController extends Controller
     public function index()
     {
         $pageTitle = 'List Barang';
-        $barangs = DB::select('select *, barangs.id as barang_id, satuans.nama as satuan_nama
-        from barangs
-        left join satuans on barangs.satuan_id = satuans.id');
+        // ELOQUENT
+        $barangs = Barang::all();
 
         return view('barang.index', ['pageTitle' => $pageTitle, 'barangs' => $barangs]);
     }
@@ -28,7 +29,7 @@ class BarangController extends Controller
     {
         $pageTitle = 'Create Barang';
         // RAW SQL Query
-        $satuans = DB::select('select * from satuans');
+        $satuans = Satuan::all();
         return view('barang.create', compact('pageTitle', 'satuans'));
     }
 
@@ -53,14 +54,17 @@ class BarangController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // INSERT QUERY
-        DB::table('barangs')->insert([
-            'kode_barang' => $request->kode_barang,
-            'nama_barang' => $request->nama_barang,
-            'deskripsi_barang' => $request->deskripsi_barang,
-            'harga_barang' => $request->harga_barang,
-            'satuan_id' => $request->satuan,
-        ]);
+
+        // ELOQUENT
+        $barang = new Barang;
+        $barang->kode_barang = $request->kode_barang;
+        $barang->nama_barang = $request->nama_barang;
+        $barang->deskripsi_barang = $request->deskripsi_barang;
+        $barang->harga_barang = $request->harga_barang;
+        $barang->satuan_id = $request->satuan;
+        $barang->save();
+
+
         return redirect()->route('barangs.index');
     }
 
@@ -71,12 +75,8 @@ class BarangController extends Controller
     {
         $pageTitle = 'Detail Barang';
         // RAW SQL QUERY
-        $barang = collect(DB::select('
-            select *, barangs.id as barang_id, satuans.nama as
-            satuan_nama
-            from barangs
-            left join satuans on barangs.satuan_id = satuans.id
-            where barangs.id = ?', [$id]))->first();
+        // ELOQUENT
+    $barang = Barang::find($id);
         return view('barang.show', compact('pageTitle', 'barang'));
     }
 
@@ -87,14 +87,11 @@ class BarangController extends Controller
     {
         $pageTitle = 'Edit Barang';
 
-        $barang = DB::table('barangs')->where('id', $id)->first();
-        $satuans = DB::table('satuans')->get();
+        // eloduent
+        $satuans = Satuan::all();
+        $barang = Barang::find($id);
 
-        //eloduent
-        // $positions = Position::all();
-        // $employee = Employee::find($id);
-
-        return view('barang.edit', compact('pageTitle', 'barang','satuans'));
+        return view('barang.edit', compact('pageTitle', 'barang', 'satuans'));
     }
 
     /**
@@ -106,7 +103,7 @@ class BarangController extends Controller
             'required' => ':Attribute harus diisi.',
             'numeric' => 'Isi :attribute dengan angka'
         ];
-    
+
         $validator = Validator::make($request->all(), [
             'kode_barang' => 'required',
             'nama_barang' => 'required',
@@ -118,22 +115,15 @@ class BarangController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        DB::table('barangs')->where('id', $id)->update([
-            'kode_barang' => $request->kode_barang,
-            'nama_barang' => $request->nama_barang,
-            'deskripsi_barang' => $request->deskripsi_barang,
-            'harga_barang' => $request->harga_barang,
-            'satuan_id' => $request->satuan,
-        ]);
-
+        
         // ELOQUENT
-        // $employee = Employee::find($id);
-        // $employee->firstname = $request->firstName;
-        // $employee->lastname = $request->lastName;
-        // $employee->email = $request->email;
-        // $employee->age = $request->age;
-        // $employee->position_id = $request->position;
-        // $employee->save();
+        $barang = new Barang;
+        $barang->kode_barang = $request->kode_barang;
+        $barang->nama_barang = $request->nama_barang;
+        $barang->deskripsi_barang = $request->deskripsi_barang;
+        $barang->harga_barang = $request->harga_barang;
+        $barang->satuan_id = $request->satuan;
+        $barang->save();
 
 
         return redirect()->route('barangs.index');
@@ -144,10 +134,8 @@ class BarangController extends Controller
      */
     public function destroy(string $id)
     {
-        // QUERY BUILDER
-        DB::table('barangs')
-            ->where('id', $id)
-            ->delete();
+       // ELOQUENT
+        Barang::find($id)->delete();
         return redirect()->route('barangs.index');
     }
 }

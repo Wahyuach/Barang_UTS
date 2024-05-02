@@ -22,8 +22,7 @@
                 <ul class="navbar-nav flex-row flex-wrap">
                     <li class="nav-item col-2 col-md-auto"><a href="{{ route('home') }}"
                             class="nav-link active">Home</a></li>
-                    <li class="nav-item col-2 col-md-auto"><a href="{{ route('employees.index') }}"
-                            class="nav-link">Employee List</a></li>
+                   
                     <li class="nav-item col-6 col-md-auto"><a href="{{ route('barangs.index') }}"
                         class="nav-link">Barang List</a></li>
                 </ul>

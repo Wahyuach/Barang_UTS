@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\BarangController;
-use App\Http\Controllers\EmployeeController;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -28,4 +27,3 @@ Route::get('profile', ProfileController::class)->name('profile');
 
 Route::resource('barangs', BarangController::class);
 
-Route::resource('employees', EmployeeController::class);

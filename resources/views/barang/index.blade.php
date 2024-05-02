@@ -23,9 +23,7 @@ scale=1.0">
                 <hr class="d-lg-none text-white-50">
                 <ul class="navbar-nav flex-row flex-wrap">
                     <li class="nav-item col-2 col-md-auto"><a href="{{ route('home') }}" class="nav-link">Home</a></li>
-                    <li class="nav-item col-2 col-md-auto"><a href="{{ route('employees.index') }}"
-                        class="nav-link active">Employee
-                        List</a></li>
+ 
                     <li class="nav-item col-2 col-md-auto"><a href="{{ route('barangs.index') }}"
                             class="nav-link active">List Barang</a></li>
 
@@ -52,32 +50,40 @@ scale=1.0">
             <table class="table table-bordered table-hover table-striped mb-0 bg-white">
                 <thead>
                     <tr>
+                        <th>Kode Barang</th>
                         <th>Nama Barang</th>
-                        <th>Deskripsi</th>
-                        <th>Stok</th>
-                        <th></th>
+                        <th>Deskripsi Barang</th>
+                        <th>Harga Barang</th>
+                        <th>Satuan Barang</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($barangs as $barang)
                         <tr>
+                            <td>{{ $barang->kode_barang }}</td>
                             <td>{{ $barang->nama_barang }}</td>
-                            <td>{{ $barang->deskripsi }}</td>
-                            <td>{{ $barang->stok }}</td>
-                            <div class="d-flex">
-                                <a href="{{ route('barangs.show', ['barang' => $barang->id]) }}"
-                                    class="btn btn-outline-dark btn-sm me-2"><i class="bi-person-lines-fill"></i></a>
-                                <a href="{{ route('barangs.edit', ['barang' => $barang->id]) }}"
-                                    class="btn btn-outline-dark btn-sm me-2"><i class="bi-pencil-square"></i></a>
-                                <div>
-                                    <form action="{{ route('barangs.destroy', ['barang' => $barangbar->id]) }}"
-                                        method="POST">
-                                        @csrf @method('delete')
-                                        <button type="submit" class="btn btn-outline-dark btn-sm me- 2"><i
-                                                class="bi-trash"></i></button>
-                                    </form>
+                            <td>{{ $barang->deskripsi_barang }}</td>
+                            <td>{{ $barang->harga_barang }}</td>
+                            <td>{{ $barang->satuan_nama }}</td>
+                            <td>
+                                <div class="d-flex">
+                                    <a href="{{ route('barangs.show', ['barang' => $barang->barang_id]) }}"
+                                        class="btn btn-outline-dark btn-sm me-2"><i class="bi-person-lines-fill"></i></a>
+
+                                    <a href="{{ route('barangs.edit', ['barang' => $barang->barang_id]) }}"
+                                        class="btn btn-outline-dark btn-sm me-2"><i class="bi-pencil-square"></i></a>
+
+                                    <div>
+                                        <form action="{{ route('barangs.destroy', ['barang' => $barang->barang_id]) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" class="btn btn-outline-dark btn-sm me-2"><i class="bi-trash"></i></button>
+                                        </form>
+                                    </div>
                                 </div>
-                            </div>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
